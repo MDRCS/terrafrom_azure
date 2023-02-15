@@ -33,8 +33,8 @@ resource "azurerm_virtual_machine" "demo-instance" {
     os_profile_linux_config {
       disable_password_authentication = true
       ssh_keys {
-        key_data = file("~/.ssh/mykey.pub")
-        path = "/Users/mdrahali"
+        key_data = file("~/.ssh/authorized_keys/key.pub")
+        path = "/home/demo/.ssh/authorized_keys" # default path allowed to store public keys for UbuntuServer OS 
       }
     }
 }
