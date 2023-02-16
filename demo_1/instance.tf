@@ -22,6 +22,7 @@ resource "azurerm_virtual_machine" "demo-instance" {
       caching = "ReadWrite"
       create_option = "FromImage"
       managed_disk_type = "Standard_LRS" # Locally redundant storage which replicates teh data three times within one datacenter
+      # StandardSSD for ssd disk option
     }
 
     os_profile {
