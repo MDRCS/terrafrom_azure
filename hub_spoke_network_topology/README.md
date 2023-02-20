@@ -1,5 +1,7 @@
 ### Overview On Hub And Spoke Network Topology 
 
+[Hub And Spoke Network Topology](./hub-spoke.png)
+
         A hub and spoke network topology is a common architecture used in cloud computing to connect multiple virtual networks. In this setup, a central virtual network acts as the "hub," with multiple other virtual networks, or "spokes," connecting to it. Each spoke is isolated from the other spokes, and all traffic between spokes must pass through the hub.
 
         To implement this topology using firewalls, we recommend using a firewall appliance in the hub virtual network to manage traffic between spokes. This can help ensure that traffic between spokes is only permitted when it meets certain criteria, such as originating from a trusted source.
