@@ -25,6 +25,8 @@ resource "azurerm_firewall" "fw" {
   location            = local.location
   resource_group_name = azurerm_resource_group.hub_spoke.name
   firewall_policy_id  = azurerm_firewall_policy.fw_policy.id
+  sku_name            = "AZFW_VNet"
+  sku_tier            = "Standard"
 
   ip_configuration {
     name                 = "ipconfig"
@@ -80,32 +82,24 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_allow" {
     rule {
       name                  = "allow_hub_jumphost"
       protocols             = ["TCP"]
-      source_addresses      = [local.subnets.hub_jumphost.address_prefixes]
+      source_addresses      = data.azurerm_subnet.hub_jumphost.address_prefixes
       destination_addresses = ["*"]
       destination_ports     = ["*"]
     }
 
     rule {
-      name                  = "allow_a_to_b_and_onprem"
+      name                  = "allow_a_to_b"
       protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = [local.subnets.a_app.address_prefixes]
-      destination_addresses = [local.subnets.b_app.address_prefixes, local.subnets.onprem_app.address_prefixes]
+      source_addresses      = data.azurerm_subnet.spoke_a_subnet.address_prefixes
+      destination_addresses = data.azurerm_subnet.spoke_a_subnet.address_prefixes
       destination_ports     = ["*"]
     }
 
     rule {
       name                  = "allow_b_to_a"
       protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = [local.subnets.b_app.address_prefixes]
-      destination_addresses = [local.subnets.a_app.address_prefixes]
-      destination_ports     = ["*"]
-    }
-
-    rule {
-      name                  = "allow_onprem_to_all"
-      protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = [local.subnets.onprem_app.address_prefixes]
-      destination_addresses = ["*"]
+      source_addresses      = data.azurerm_subnet.spoke_a_subnet.address_prefixes
+      destination_addresses = data.azurerm_subnet.spoke_a_subnet.address_prefixes
       destination_ports     = ["*"]
     }
   }

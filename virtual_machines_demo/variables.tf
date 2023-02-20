@@ -1,14 +1,14 @@
 variable "location" {
-    type = string
-    default = "westeurope"
+  type    = string
+  default = "westeurope"
 }
 
 variable "prefix" {
-  type = string
+  type    = string
   default = "demo"
 }
 
 variable "ssh-source-address" {
-  type = string
+  type    = string
   default = "*" # * : means everypne could connect to your instance though ssh.
 }

@@ -33,10 +33,10 @@ resource "azurerm_virtual_network" "vnet_spoke_b" {
 # terraform apply -auto-approve -var-file=values.tfvars
 
 resource "azurerm_subnet" "hub_gw" {
-  name                                           = "GatewaySubnet"
-  resource_group_name                            = azurerm_resource_group.hub_spoke.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_hub.name
-  address_prefixes                               = ["10.0.1.0/24"]
+  name                                      = "GatewaySubnet"
+  resource_group_name                       = azurerm_resource_group.hub_spoke.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
+  address_prefixes                          = ["10.0.1.0/24"]
   private_endpoint_network_policies_enabled = true
 
   depends_on = [azurerm_virtual_network.vnet_hub]
@@ -44,10 +44,10 @@ resource "azurerm_subnet" "hub_gw" {
 }
 
 resource "azurerm_subnet" "hub_firewall" {
-  name                                           = "AzureFirewallSubnet"
-  resource_group_name                            = azurerm_resource_group.hub_spoke.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_hub.name
-  address_prefixes                               = ["10.0.2.0/24"]
+  name                                      = "AzureFirewallSubnet"
+  resource_group_name                       = azurerm_resource_group.hub_spoke.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
+  address_prefixes                          = ["10.0.2.0/24"]
   private_endpoint_network_policies_enabled = true
 
   depends_on = [azurerm_virtual_network.vnet_hub]
@@ -55,10 +55,10 @@ resource "azurerm_subnet" "hub_firewall" {
 }
 
 resource "azurerm_subnet" "hub_firewall_mgmt" {
-  name                                           = "AzureFirewallManagementSubnet"
-  resource_group_name                            = azurerm_resource_group.hub_spoke.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_hub.name
-  address_prefixes                               = ["10.0.3.0/24"]
+  name                                      = "AzureFirewallManagementSubnet"
+  resource_group_name                       = azurerm_resource_group.hub_spoke.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
+  address_prefixes                          = ["10.0.3.0/24"]
   private_endpoint_network_policies_enabled = true
 
   depends_on = [azurerm_virtual_network.vnet_hub]
@@ -66,10 +66,10 @@ resource "azurerm_subnet" "hub_firewall_mgmt" {
 }
 
 resource "azurerm_subnet" "hub_jumphost" {
-  name                                           = "jump"
-  resource_group_name                            = azurerm_resource_group.hub_spoke.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_hub.name
-  address_prefixes                               = ["10.0.4.0/24"]
+  name                                      = "jump"
+  resource_group_name                       = azurerm_resource_group.hub_spoke.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
+  address_prefixes                          = ["10.0.4.0/24"]
   private_endpoint_network_policies_enabled = true
 
   depends_on = [azurerm_virtual_network.vnet_hub]
@@ -79,10 +79,10 @@ resource "azurerm_subnet" "hub_jumphost" {
 # Spokes Subnets 
 
 resource "azurerm_subnet" "spoke_a_subnet" {
-  name                                           = "SpokeASubnet"
-  resource_group_name                            = azurerm_resource_group.hub_spoke.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_spoke_a.name
-  address_prefixes                               = ["10.1.1.0/24"]
+  name                                      = "SpokeASubnet"
+  resource_group_name                       = azurerm_resource_group.hub_spoke.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_spoke_a.name
+  address_prefixes                          = ["10.1.1.0/24"]
   private_endpoint_network_policies_enabled = true
 
   depends_on = [azurerm_virtual_network.vnet_spoke_a]
@@ -90,10 +90,10 @@ resource "azurerm_subnet" "spoke_a_subnet" {
 }
 
 resource "azurerm_subnet" "spoke_b_subnet" {
-  name                                           = "SpokeBSubnet"
-  resource_group_name                            = azurerm_resource_group.hub_spoke.name
-  virtual_network_name                           = azurerm_virtual_network.vnet_spoke_b.name
-  address_prefixes                               = ["10.2.1.0/24"]
+  name                                      = "SpokeBSubnet"
+  resource_group_name                       = azurerm_resource_group.hub_spoke.name
+  virtual_network_name                      = azurerm_virtual_network.vnet_spoke_b.name
+  address_prefixes                          = ["10.2.1.0/24"]
   private_endpoint_network_policies_enabled = true
 
   depends_on = [azurerm_virtual_network.vnet_spoke_b]

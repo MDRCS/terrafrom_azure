@@ -13,10 +13,10 @@ provider "azurerm" {
 }
 
 
-resource "azurerm_resource_group" "network-security-group-demo" {
-  name     = "network-security-group-${var.prefix}"
+resource "azurerm_resource_group" "scalesets-loadbalancer-demo" {
+  name     = "scalesets-loadbalancer-${var.prefix}"
   location = var.location
   tags = {
-    env = "network-security-group-${var.prefix}"
+    env = "scalesets-loadbalancer-${var.prefix}"
   }
 }

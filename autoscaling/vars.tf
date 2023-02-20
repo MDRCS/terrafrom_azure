@@ -14,6 +14,7 @@ variable "ssh-source-address" {
   default = "*" # * : means everypne could connect to your instance though ssh.
 }
 
-locals {
-  custom_data = file("${path.module}/scripts/install-nginx.sh")
+variable "zones" {
+  type    = list(string)
+  default = []
 }
