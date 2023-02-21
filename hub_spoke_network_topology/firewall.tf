@@ -82,7 +82,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_allow" {
     rule {
       name                  = "allow_hub_jumphost"
       protocols             = ["TCP"]
-      source_addresses      = var.subnet_hub_addresses # data.azurerm_subnet.hub_jumphost.address_prefixes
+      source_addresses      = var.subnet_hub_addresses
       destination_addresses = ["*"]
       destination_ports     = ["*"]
     }
@@ -90,16 +90,16 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_allow" {
     rule {
       name                  = "allow_a_to_b"
       protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = var.subnet_spoke_a_addresses # data.azurerm_subnet.spoke_a_subnet.address_prefixes
-      destination_addresses = var.subnet_spoke_b_addresses #data.azurerm_subnet.spoke_b_subnet.address_prefixes
+      source_addresses      = var.subnet_spoke_a_addresses
+      destination_addresses = var.subnet_spoke_b_addresses
       destination_ports     = ["*"]
     }
 
     rule {
       name                  = "allow_b_to_a"
       protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = var.subnet_spoke_b_addresses # data.azurerm_subnet.spoke_b_subnet.address_prefixes
-      destination_addresses = var.subnet_spoke_a_addresses # data.azurerm_subnet.spoke_a_subnet.address_prefixes
+      source_addresses      = ["*"] # var.subnet_spoke_b_addresses
+      destination_addresses = var.subnet_spoke_a_addresses
       destination_ports     = ["*"]
     }
   }
