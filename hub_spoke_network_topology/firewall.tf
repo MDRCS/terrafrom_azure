@@ -43,7 +43,7 @@ resource "azurerm_firewall" "fw" {
 
 # Create Firewall Policies
 resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_deny" {
-  name               = "${local.org}-firewall-policies"
+  name               = "${local.org}-frw-rules-deny"
   firewall_policy_id = azurerm_firewall_policy.fw_policy.id
   priority           = 1000
 
@@ -82,7 +82,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_allow" {
     rule {
       name                  = "allow_hub_jumphost"
       protocols             = ["TCP"]
-      source_addresses      = data.azurerm_subnet.hub_jumphost.address_prefixes
+      source_addresses      = var.subnet_hub_addresses # data.azurerm_subnet.hub_jumphost.address_prefixes
       destination_addresses = ["*"]
       destination_ports     = ["*"]
     }
@@ -90,16 +90,16 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_allow" {
     rule {
       name                  = "allow_a_to_b"
       protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = data.azurerm_subnet.spoke_a_subnet.address_prefixes
-      destination_addresses = data.azurerm_subnet.spoke_a_subnet.address_prefixes
+      source_addresses      = var.subnet_spoke_a_addresses # data.azurerm_subnet.spoke_a_subnet.address_prefixes
+      destination_addresses = var.subnet_spoke_b_addresses #data.azurerm_subnet.spoke_b_subnet.address_prefixes
       destination_ports     = ["*"]
     }
 
     rule {
       name                  = "allow_b_to_a"
       protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = data.azurerm_subnet.spoke_a_subnet.address_prefixes
-      destination_addresses = data.azurerm_subnet.spoke_a_subnet.address_prefixes
+      source_addresses      = var.subnet_spoke_b_addresses # data.azurerm_subnet.spoke_b_subnet.address_prefixes
+      destination_addresses = var.subnet_spoke_a_addresses # data.azurerm_subnet.spoke_a_subnet.address_prefixes
       destination_ports     = ["*"]
     }
   }
@@ -112,7 +112,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_allow" {
       name                = "jumphost_rdp"
       protocols           = ["TCP"]
       source_addresses    = [data.external.my_ip.result.ip]
-      destination_address = "20.227.0.88"
+      destination_address = azurerm_public_ip.fw_ip.ip_address
       destination_ports   = ["3387"]
       translated_address  = "10.0.4.4"
       translated_port     = "3389"

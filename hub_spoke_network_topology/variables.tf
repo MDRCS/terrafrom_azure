@@ -1,3 +1,18 @@
+variable "subnet_hub_addresses" {
+  type = list(string)
+  default = ["10.0.4.0/24"]
+}
+
+variable "subnet_spoke_a_addresses" {
+  type = list(string)
+  default = ["10.1.1.0/24"]
+}
+
+variable "subnet_spoke_b_addresses" {
+  type = list(string)
+  default = ["10.2.1.0/24"]
+}
+
 variable "subscription_id" {
   type    = string
   default = "default"
@@ -16,10 +31,10 @@ variable "tenant_id" {
 }
 
 locals {
-  org       = "tcm_labs"
+  org       = "tcm-labs"
   location  = "westeurope"
-  fw_name   = "${local.org}-azfw"
-  fw_policy = "${local.org}-fw-policy"
+  fw_name   = "tcm-labs-azfw"
+  fw_policy = "tcm-labs-fw-policy"
 }
 
 # la = [

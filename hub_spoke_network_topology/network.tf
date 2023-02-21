@@ -1,8 +1,3 @@
-resource "azurerm_resource_group" "hub_spoke" {
-  name     = "${local.org}-rm"
-  location = local.location
-}
-
 # Define Hub Vnet
 resource "azurerm_virtual_network" "vnet_hub" {
   name                = "${local.org}-hub"
@@ -38,9 +33,7 @@ resource "azurerm_subnet" "hub_gw" {
   virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
   address_prefixes                          = ["10.0.1.0/24"]
   private_endpoint_network_policies_enabled = true
-
-  depends_on = [azurerm_virtual_network.vnet_hub]
-
+  depends_on                                = [azurerm_resource_group.hub_spoke]
 }
 
 resource "azurerm_subnet" "hub_firewall" {
@@ -49,9 +42,7 @@ resource "azurerm_subnet" "hub_firewall" {
   virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
   address_prefixes                          = ["10.0.2.0/24"]
   private_endpoint_network_policies_enabled = true
-
-  depends_on = [azurerm_virtual_network.vnet_hub]
-
+  depends_on                                = [azurerm_resource_group.hub_spoke]
 }
 
 resource "azurerm_subnet" "hub_firewall_mgmt" {
@@ -60,9 +51,7 @@ resource "azurerm_subnet" "hub_firewall_mgmt" {
   virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
   address_prefixes                          = ["10.0.3.0/24"]
   private_endpoint_network_policies_enabled = true
-
-  depends_on = [azurerm_virtual_network.vnet_hub]
-
+  depends_on                                = [azurerm_resource_group.hub_spoke]
 }
 
 resource "azurerm_subnet" "hub_jumphost" {
@@ -71,22 +60,17 @@ resource "azurerm_subnet" "hub_jumphost" {
   virtual_network_name                      = azurerm_virtual_network.vnet_hub.name
   address_prefixes                          = ["10.0.4.0/24"]
   private_endpoint_network_policies_enabled = true
-
-  depends_on = [azurerm_virtual_network.vnet_hub]
-
+  depends_on                                = [azurerm_resource_group.hub_spoke]
 }
 
 # Spokes Subnets 
-
 resource "azurerm_subnet" "spoke_a_subnet" {
   name                                      = "SpokeASubnet"
   resource_group_name                       = azurerm_resource_group.hub_spoke.name
   virtual_network_name                      = azurerm_virtual_network.vnet_spoke_a.name
   address_prefixes                          = ["10.1.1.0/24"]
   private_endpoint_network_policies_enabled = true
-
-  depends_on = [azurerm_virtual_network.vnet_spoke_a]
-
+  depends_on                                = [azurerm_resource_group.hub_spoke]
 }
 
 resource "azurerm_subnet" "spoke_b_subnet" {
@@ -95,9 +79,7 @@ resource "azurerm_subnet" "spoke_b_subnet" {
   virtual_network_name                      = azurerm_virtual_network.vnet_spoke_b.name
   address_prefixes                          = ["10.2.1.0/24"]
   private_endpoint_network_policies_enabled = true
-
-  depends_on = [azurerm_virtual_network.vnet_spoke_b]
-
+  depends_on                                = [azurerm_resource_group.hub_spoke]
 }
 
 # Create peering between Vnets
