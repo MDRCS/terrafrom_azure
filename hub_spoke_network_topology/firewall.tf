@@ -98,7 +98,7 @@ resource "azurerm_firewall_policy_rule_collection_group" "fw_rules_allow" {
     rule {
       name                  = "allow_b_to_a"
       protocols             = ["TCP", "UDP", "ICMP"]
-      source_addresses      = ["*"] # var.subnet_spoke_b_addresses
+      source_addresses      = var.subnet_spoke_b_addresses
       destination_addresses = var.subnet_spoke_a_addresses
       destination_ports     = ["*"]
     }
