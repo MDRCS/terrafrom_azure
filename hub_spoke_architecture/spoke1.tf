@@ -47,6 +47,50 @@ resource "azurerm_virtual_network_peering" "spoke1-hub-peer" {
   depends_on                   = [azurerm_virtual_network.spoke1-vnet, azurerm_virtual_network.hub-vnet, azurerm_virtual_network_gateway.hub-vnet-gateway]
 }
 
+# Create Network Security Group and rule to Allow Inbound/Outbound Traffic
+resource "azurerm_network_security_group" "spoke-1-nsg" {
+  name                = "${local.prefix-spoke1}-nsg"
+  location            = azurerm_resource_group.spoke1-vnet-rg.location
+  resource_group_name       = azurerm_resource_group.spoke1-vnet-rg.name
+
+  security_rule {
+    name                       = "SSH"
+    priority                   = 1001
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "22"
+    source_address_prefix      = data.external.my_ip.result.ip
+    destination_address_prefix = "*"
+  }
+
+  # Allow Outbound Access from Hub and Spoke Network to my laptop IP Address
+  security_rule {
+    name                       = "Conn"
+    priority                   = 1002
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = data.external.my_ip.result.ip
+  }
+
+  tags = {
+    environment = local.prefix-spoke1
+  }
+}
+
+resource "azurerm_public_ip" "spoke-1-public-ip" {
+  name                = "${local.prefix-spoke1}-public-ip"
+  location            = azurerm_resource_group.spoke1-vnet-rg.location
+  resource_group_name = azurerm_resource_group.spoke1-vnet-rg.name
+  allocation_method   = "Dynamic"
+}
+
+
 resource "azurerm_network_interface" "spoke1-nic" {
   name                 = "${local.prefix-spoke1}-nic"
   location             = azurerm_resource_group.spoke1-vnet-rg.location
@@ -57,6 +101,7 @@ resource "azurerm_network_interface" "spoke1-nic" {
     name                          = local.prefix-spoke1
     subnet_id                     = azurerm_subnet.spoke1-mgmt.id
     private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.spoke-1-public-ip.id
   }
 }
 

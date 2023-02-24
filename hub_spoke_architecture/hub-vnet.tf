@@ -28,19 +28,19 @@ resource "azurerm_subnet" "hub-gateway-subnet" {
   address_prefixes     = ["10.0.0.0/27"]
 }
 
-# resource "azurerm_subnet" "hub_firewall" {
-#   name                 = "AzureFirewallSubnet"
-#   resource_group_name  = azurerm_resource_group.hub-vnet-rg.name
-#   virtual_network_name = azurerm_virtual_network.hub-vnet.name
-#   address_prefixes     = ["10.0.0.1/26"]
-# }
+resource "azurerm_subnet" "hub_firewall" {
+  name                 = "AzureFirewallSubnet"
+  resource_group_name  = azurerm_resource_group.hub-vnet-rg.name
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
+  address_prefixes     = ["10.0.3.0/26"]
+}
 
-# resource "azurerm_subnet" "hub_firewall_mgmt" {
-#   name                 = "AzureFirewallManagementSubnet"
-#   resource_group_name  = azurerm_resource_group.hub-vnet-rg.name
-#   virtual_network_name = azurerm_virtual_network.hub-vnet.name
-#   address_prefixes     = ["10.0.0.64/27"]
-# }
+resource "azurerm_subnet" "hub_firewall_mgmt" {
+  name                 = "AzureFirewallManagementSubnet"
+  resource_group_name  = azurerm_resource_group.hub-vnet-rg.name
+  virtual_network_name = azurerm_virtual_network.hub-vnet.name
+  address_prefixes     = ["10.0.5.0/26"]
+}
 
 resource "azurerm_subnet" "hub-mgmt" {
   name                 = "mgmt"
@@ -139,4 +139,3 @@ resource "azurerm_virtual_network_gateway" "hub-vnet-gateway" {
   }
   depends_on = [azurerm_public_ip.hub-vpn-gateway1-pip]
 }
-
